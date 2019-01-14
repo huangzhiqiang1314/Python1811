@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
-from app.models import Wheel, Nav, Mustbuy
+from app.models import Wheel, Nav, Mustbuy, Shop, MainShow, Foodtype, Goods
 
 
 def home(request):
@@ -14,16 +14,65 @@ def home(request):
     # 每日必购
     mustbuys = Mustbuy.objects.all()
 
+
+    # 商品（部分）
+    shops =Shop.objects.all()
+    shophead =shops[0]
+    shoptabs = shops[1:3]
+    shopclass = shops[3:7]
+    shopcommends =shops[7:11]
+
+    # 商品主体
+    mainshows = MainShow.objects.all()
+
     data = {
         'wheels':wheels,
         'navs':navs,
         'mustbuys':mustbuys,
+        'shophead':shophead,
+        'shoptabs':shoptabs,
+        'shopclass':shopclass,
+        'shopcommends':shopcommends,
+        'mainshows':mainshows,
     }
     return render(request,'home/home.html',context=data)
 
 
 def market(request):
-    return render(request, 'market/market.html')
+    # 分类
+    foodtypes = Foodtype.objects.all()
+
+    # 获取 客户端点击的 分类下标  ==》》typeIndex
+    typeIndex = int(request.COOKIES.get('typeIndex',0))
+
+    # 根据分类下标   获取 分类ID
+    categoryid = foodtypes[typeIndex].typeid
+
+    # 获取对应分类下 子类
+    childtypenames = foodtypes[typeIndex].childtypenames
+    # 拆分
+    childtypes = []
+    for item in childtypenames.split('#'):
+        # item  >> 子类名称:子类ID
+        temp = item.split(':')
+        dir = {
+            'childname': temp[0],
+            'childid': temp[1]
+        }
+        childtypes.append(dir)
+
+    # 商品
+    # goods_list = Goods.objects.all()[0:5]
+    goods_list = Goods.objects.filter(categoryid=categoryid)
+
+
+    data = {
+        'foodtypes':foodtypes,
+        'goods_list':goods_list,
+        'childtypes':childtypes,
+
+    }
+    return render(request, 'market/market.html',context=data)
 
 
 def cart(request):

@@ -73,9 +73,6 @@ footer .market dd {
 }
 .market nav ul li span i{
     margin-left: 0.4rem;
-    /*font-size: 22px;*/
-    /*color: red;*/
-
 }
 
 
@@ -104,6 +101,7 @@ footer .market dd {
     margin: 0.7rem;
     border-radius: 0.2rem;
     position: relative;
+	overflow: hidden;
 }
 .market .main-content .content-wrapper ul li a{
     display: block;
@@ -113,7 +111,6 @@ footer .market dd {
     display: block;
     width: 33.3%;
     float: left;
-    height: 100%;
 }
 .market .main-content .content-wrapper ul li a .goods-info{
     width: 66.6%;
@@ -205,4 +202,3 @@ footer .market dd {
     margin-top: 0.2rem;
     margin-left: 0.2rem;
 }
-

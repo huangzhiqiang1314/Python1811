@@ -1,23 +1,33 @@
 $(function () {
-
-    // 设置回到屏幕宽度
+    // 为了保证屏幕宽度不受到影响
     $('.home').width(innerWidth)
 
-    var topswiper = new Swiper('#topswiper', {
+    var topSwiper = new Swiper('#topSwiper', {
         pagination: '.swiper-pagination',
         slidesPerView: 1,
         paginationClickable: true,
         spaceBetween: 30,
         loop: true,
-        autoplay: 2500,
+        autoplay: 3000,
+
+        effect: 'coverflow',
+        grabCursor: true,
+        coverflow: {
+            shadow: true,
+            slideShadows: true,
+            shadowOffset: 20,
+            shadowScale: 0.94
+        }
     });
 
-    var mustbuyswiper = new Swiper('#mustbuySwiper', {
+
+    var mustbuySwiper = new Swiper('#mustbuySwiper', {
         paginationClickable: true,
-        slidesPerView: 3,
         spaceBetween: 3,
         loop: true,
-        autoplay: 2500,
+        autoplay: 3000,
+        slidesPerView: 3,
         freeMode: true
     });
+
 })

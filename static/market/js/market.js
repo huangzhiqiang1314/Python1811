@@ -1,101 +1,90 @@
 $(function () {
-    //屏幕宽度处理
+    $('.market').width(innerWidth)
 
-    $(".market").width(innerWidth)
-
-    //获取 typeIndex
+    // 获取 分类下标，并设置对应的样式
     var typeIndex = $.cookie('typeIndex')
-    if (typeIndex) { //有下标记录
-
-        $('.type-slider .type-item').eq(typeIndex).addClass('active')
-    } else {//没有下标记录
-        $('.type-slider .type-item:first').addClass('active')
-
+    if(typeIndex){  // 有值(之前有操作过)
+        $('.type-item').eq(typeIndex).find('span').show()
+    } else {    // 第一次进入
+        $('.type-item:first').find('span').show()
     }
-    // 侧边栏  分类  点击
-    //问题描述： 当点击分类时,样式添加成功,之后又会消失
-    //问题分析：点击分类是a标签，在样式设置完成后，后重新刷新页面：
-    //重新刷新页面，样式会被重置
+    
+    
+    // 侧边栏 点击
+    $('.type-item').click(function () {
+        // 记录下标
+        /* jquery.cookie操作
+            # 设置
+            $.cookie(key, vlaue, options)
+                options选项 {expires:过期时间, path: 路径}
 
-    //问题解决：记录点击分类的下标
-    //用什么记录？ cookie
-    // 为了方便操作cookie  引入jquery.cookie.js
-    //设置cookie  $.cookie(key,value,opthions)
-    //获取cookie  $.cookie(key)
-    //删除cookie  $.cookie(key,null)
-    //opthions选项 {‘expires’:过期时间，path:路径}
-    $('.type-slider .type-item').click(function () {
-        // $（this） 被点击的li
+            # 获取
+            $.cookie(key)
 
-        // $(this).addClass('active')
-
-        //记录 分类 下标  $(this).index()
-        $.cookie('typeIndex', $(this).index(), {expires: 3, path: '/'})
+            # 删除
+            $.cookie(key, null)
+        */
+        $.cookie('typeIndex', $(this).index(), {path: '/'})
     })
-    //全部类型  点击
+
+
+
+
+    // 全部类型点击
     var categoryShow = false
     $('#category-bt').click(function () {
-        //取反
-        categoryShow = !categoryShow
-        categoryShow ? categoryViewShow() : categoryViewHide()
-    })
+        console.log('全部类型点击')
+            // 取反
+            categoryShow = !categoryShow
 
-    //综合排序  点击   >直接指代子元素
+            // 三目运算符
+            categoryShow ? categoryViewShow() : categoryViewHide()
+        }
+    )
+
+    // 综合排序点击
     var sortShow = false
     $('#sort-bt').click(function () {
-        sortShow = !sortShow
-        sortShow ? sortViewShow() : sortViewHide()
+        console.log('综合排序点击')
+            // 取反
+            sortShow = !sortShow
 
-
-    })
-    //问题：（排序按钮中） 点击2次才能显示
-    //问题还原：
-    // 点击‘全部类型’按钮 >> ‘子类信息view’显示
-    //   点击 蒙层>>> '子类信息view' 隐藏
-    //  点击‘全部类型’按钮 >> ‘子类信息view’  不显示
-    //  点击‘全部类型’按钮 >> ‘子类信息view’  显示
-
+            // 三目运算符
+            sortShow ? sortViewShow() : sortViewHide()
+        }
+    )
+    
+    // 蒙层点击
     $('.bounce-view').click(function () {
+        sortShow = false
+        sortViewHide()
+
+        categoryShow = false
         categoryViewHide()
-        categoryShow= false
-
-        sortViewHide()
-        sortShow=false
-
     })
-
+    
+    
     function categoryViewShow() {
-        sortShow=false
+        sortShow = false
         sortViewHide()
-        $('.bounce-view.category-view').show()
-        //glyphicon-arrow-down
-        //先移除glyphicon-arrow-up  再添加glyphicon-arrow-down
-        $('#category-bt i').removeClass('glyphicon-arrow-up')
-            .addClass('glyphicon-arrow-down')
-
+        $('.category-view').show()
+        $('#category-bt i').removeClass('glyphicon-triangle-top').addClass('glyphicon-triangle-bottom')
     }
-
+    
     function categoryViewHide() {
-
-        $('.bounce-view.category-view').hide()
-
-        $('#category-bt i').removeClass('glyphicon-arrow-down')
-            .addClass('glyphicon-arrow-up')
+        $('.category-view').hide()
+        $('#category-bt i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top')
     }
 
     function sortViewShow() {
-        categoryShow=false
+        categoryShow = false
         categoryViewHide()
-        $('.bounce-view.sort-view').show()
-        $('#sort-bt i').removeClass('glyphicon-arrow-up')
-            .addClass('glyphicon-arrow-down')
-
+        $('.sort-view').show()
+        $('#sort-bt i').removeClass('glyphicon-triangle-top').addClass('glyphicon-triangle-bottom')
     }
 
     function sortViewHide() {
-        $('.bounce-view.sort-view').hide()
-        $('#sort-bt i').removeClass('glyphicon-arrow-down')
-            .addClass('glyphicon-arrow-up')
-
+        $('.sort-view').hide()
+        $('#sort-bt i').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-top')
     }
 })
